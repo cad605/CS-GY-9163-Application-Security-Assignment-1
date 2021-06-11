@@ -1,0 +1,26 @@
+Christopher Donnelly
+CS-GY-9163 Application Security
+Bugs.txt
+
+Crash 1 -
+
+The first crash file manipulates the `number of bytes` field. In this test case, we simply make this a negative number.
+When this test case is run, `./giftcardreader 1 crash1.gft`, we get receive the following error: `segmentation fault  ./giftcardreader 1 crash1.gft`, 
+indicating memory corruption or that the program is trying to access memory it shouldn't be. In this case, the actual size of the file is incorrectly 
+recorded in the gift card. In order to remedy this,we place checks that validate that the actual size of the file (reported by the OS) match the size 
+reported within the gift card file. If the sizes don't match, we report the error and abort the program.
+
+Crash 2 -
+
+The second crash file attempts to run a program that uses the instruction set to place an arguement in an out-of-bounds register. 
+The total number of registers in the `program` is 16. In this case, we attempt to index into an out-of-bounds register using the operation `0x01`. 
+In order to remedy this, we declare a constant value for the number of registers, 16, and then we define a macro that checks whether the register we 
+are attempting to index into is within those bounds. We then check this for every operation that requires manipulating the registers.
+
+Hang - 
+
+Finally, the hang file simply uses the `0x09` operation to move the program pointer back three places after the intial operation runs. 
+The inital operation complettes then moves the pointer forward by three. Then the second operation moves the pointer back by three. The first operation 
+will then run execute again, and it will continue in this way. In order to remedy this, we define a constant for the maximum number of steps that can be 
+executed by the program. For each iteration of the loop, we increase the steps counter by 1. When the steps count exceeds the maximum number of steps, we 
+break the loop and exit the program.
