@@ -13,9 +13,19 @@ compiler:
   # - gem install coveralls-lcov
 
 # Build steps
-script: 
-  - cd ./src
-  - make
+jobs:
+  include:
+    - stage: build
+      script: 
+        - cd ./src
+        - make
+    - stage: test
+      script: 
+        - cd ./src
+        - gcc -o giftcardreader giftcardreader.c
+        - ./giftcardreader 1 ../part2/crash1.gft
+        - ./giftcardreader 1 ../part2/crash2.gft
+        - ./giftcardreader 1 ../part2/hang.gft
   # - make && ./test-library.out
   # - ./hello
   # - gcov hello.c
