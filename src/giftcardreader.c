@@ -315,7 +315,7 @@ int main(int argc, char **argv) {
     FILE *input_fd = fopen(argv[2],"r");
     thisone = gift_card_reader(input_fd);
     if (thisone == NULL) {
-        return 1;
+        return 0;
     } else {
         if (argv[1][0] == '1') print_gift_card_info(thisone);
         else if (argv[1][0] == '2') gift_card_json(thisone);
