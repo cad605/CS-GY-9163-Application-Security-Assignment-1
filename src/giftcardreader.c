@@ -7,7 +7,7 @@
  */
 
 
-#include "giftcardreader.h"
+#include "giftcard.h"
 
 #include <stdio.h>
 #include <stdlib.h>
