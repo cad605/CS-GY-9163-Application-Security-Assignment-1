@@ -31,8 +31,10 @@ void animate(char *msg, unsigned char *program) {
     int zf = 0;
     uint64_t steps = 0;
     while (steps < PROGRAM_MAX_STEPS) {
-        if (!PC_INBOUNDS()) break;
-
+        if (!PC_INBOUNDS()) {
+            break;
+        }
+        
         unsigned char op, arg1, arg2;
         op = *pc;
         arg1 = *(pc+1);
@@ -229,7 +231,6 @@ struct this_gift_card *gift_card_reader(FILE *input_fd) {
             return NULL;
         }
 
-        // Check that it actually matches, to detect corrupt files
         if (given_file_size != actual_file_size) {
             fprintf(stderr, "Error: Actual file size, (%ld), does not match size reported in gift card, (%d).\n",
                     actual_file_size, given_file_size);
