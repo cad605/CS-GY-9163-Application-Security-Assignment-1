@@ -1,18 +1,13 @@
 language: c
 
-# Compiler selection
 compiler:
   - gcc
 
-# install:
-#   - wget http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz
-#   - tar xf lcov_1.11.orig.tar.gz
-#   - sudo make -C lcov-1.11/ install
+install:
+  - wget http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz
+  - tar xf lcov_1.11.orig.tar.gz
+  - sudo make -C lcov-1.11/ install
 
-  # install lcov to coveralls conversion + upload tool
-  # - gem install coveralls-lcov
-
-# Build steps
 jobs:
   include:
     - stage: build
@@ -22,17 +17,16 @@ jobs:
     - stage: test
       script: 
         - cd ./src
-        - gcc -o giftcardreader giftcardreader.c
+        - gcc --coverage -o giftcardreader giftcardreader.c
         - ./giftcardreader 1 ../part2/crash1.gft
         - ./giftcardreader 1 ../part2/crash2.gft
         - ./giftcardreader 1 ../part2/hang.gft
-  # - make && ./test-library.out
-  # - ./hello
-  # - gcov hello.c
-
-# after_success:
-#   - cd ${TRAVIS_BUILD_DIR}
-#   - lcov --directory . --capture --output-file coverage.info # capture coverage info
-#   - lcov --remove coverage.info 'tests/*' '/usr/*' 'test-library*' --output-file coverage.info # filter out system and test code
-#   - lcov --list coverage.info # debug before upload
-#   - coveralls-lcov  coverage.info #for open source 
+        - ./giftcardreader 2 ../part3/cov1.gft
+        - ./giftcardreader 2 ../part3/cov2.gft
+        - ./giftcardreader 2 ../part3/crash1.gft
+        - ./giftcardreader 2 ../part3/crash2.gft
+        - for filename in ../part3/fuzzing/queue/*; do ./giftcardreader 1 "${filename}"; done
+      after_success:
+        - cd .src
+        - lcov --capture --directory . --output-file coverage.info
+        - genhtml coverage.info --output-directory ../part3/coverage
